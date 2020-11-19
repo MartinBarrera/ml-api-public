@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from middleware import model_predict
+
+
 from flask import (
     Blueprint,
     request,
@@ -26,7 +29,6 @@ def index():
     }
     # Obtiene la sentencia ingresada por el usuario en el frontend
     text_data = request.form.get('text_data')
-
     if text_data:
         #################################################################
         # COMPLETAR AQUI: Envie el texto ingresado para ser procesado
@@ -34,7 +36,11 @@ def index():
         # Luego con los resultados obtenidos, complete el diccionario
         # "context" para mostrar la predicción en el frontend.
         #################################################################
-        raise NotImplementedError
+        prediction, score = model_predict(text_data=text_data)
+        context['text'] = text_data
+        context['prediction'] = prediction
+        context['score'] = score
+        context['success'] = True
         #################################################################
 
     return render_template('index.html', context=context)
@@ -79,7 +85,11 @@ def predict():
         # de la misma. Complete los campos de "rpse" con los valores
         # obtenidos.
         #################################################################
-        raise NotImplementedError
+        prediction, score = model_predict(text_data=request.args.get('text'))
+
+        rpse['prediction'] = prediction
+        rpse['score'] = score
+        rpse['success'] = True
         #################################################################
 
         return jsonify(rpse)
