@@ -15,6 +15,7 @@ services:
       - model
     volumes:
       - ./feedback:/src/feedback
+      - ./api:/src
     tty: true
     logging:
       driver: "gelf"
@@ -30,6 +31,8 @@ services:
     container_name: ml_service
     build:
       context: ./model
+    volumes:
+      - ./model:/src
     command: "python3 /src/ml_service.py"
     depends_on:
       - redis
